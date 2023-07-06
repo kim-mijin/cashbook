@@ -40,8 +40,8 @@ public class ModifyCashbookController extends HttpServlet {
 		int cashbookNo = Integer.parseInt(request.getParameter("cashbookNo"));
 		
 		//가계부를 가져오는 메서드 실행
-		CashbookDao cashbookDao = new CashbookDao();
-		Cashbook cashbook = cashbookDao.selectCashbookByNo(cashbookNo);
+		CashbookService cashbookService = new CashbookService();
+		Cashbook cashbook = cashbookService.printCashbookByNo(cashbookNo);
 		
 		//request에 담기
 		request.setAttribute("memberId", memberId);

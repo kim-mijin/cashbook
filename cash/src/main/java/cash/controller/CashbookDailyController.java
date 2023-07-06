@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import cash.dao.CashbookDao;
+import cash.service.CashbookService;
 import cash.vo.Cashbook;
 import cash.vo.Member;
 
@@ -50,8 +51,8 @@ public class CashbookDailyController extends HttpServlet {
 		System.out.println(targetDate + " <--CashbookDailyController targetDate");
 		
 		//해당 날짜의 모델값 불러오기 
-		CashbookDao cashbookDao = new CashbookDao();
-		List<Cashbook> list = cashbookDao.selectCashbookListByDate(memberId, targetYear, targetMonth, targetDate);
+		CashbookService cashbookService = new CashbookService();
+		List<Cashbook> list = cashbookService.printDailyCashbook(memberId, targetYear, targetMonth, targetDate);
 		
 		//request속성으로 모델 값 보내기
 		request.setAttribute("targetYear", targetYear);

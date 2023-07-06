@@ -17,6 +17,7 @@ public class MemberService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //자동 커밋 해제
 			
@@ -51,6 +52,7 @@ public class MemberService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //자동 커밋 해제
 			
@@ -85,6 +87,7 @@ public class MemberService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //자동 커밋 해제
 			

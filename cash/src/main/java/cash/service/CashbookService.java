@@ -3,7 +3,11 @@ package cash.service;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import cash.dao.CashbookDao;
@@ -12,6 +16,168 @@ import cash.vo.Cashbook;
 import cash.vo.Hashtag;
 
 public class CashbookService {
+	//가계부 달력 및 해당월 해시태그목록 출력
+	public Map<String, Object> printCashbookCalendar(String memberId, int targetYear, int targetMonth){
+		List<Cashbook> cashbookList = new ArrayList<Cashbook>();
+		List<Map<String, Object>> tagList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = null;
+		Connection conn = null;
+		
+		try {
+			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			conn.setAutoCommit(false); //conn 자동 커밋 해제
+			
+			//월별 가계부 출력
+			CashbookDao cashbookDao = new CashbookDao();
+			cashbookList = cashbookDao.selectCashbookListByMonth(conn, memberId, targetYear, targetMonth+1);
+			
+			//월별 해쉬태그 목록 출력
+			HashtagDao hashtagDao = new HashtagDao();
+			tagList = hashtagDao.selectWordCountByMonth(conn, memberId, targetYear, targetMonth+1);
+			
+			//Map으로 묶기
+			map = new HashMap<String, Object>();
+			map.put("cashbookList", cashbookList);
+			map.put("tagList", tagList);
+			
+			conn.commit();
+		} catch(Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return map;
+	}
+	
+	//일별 가계부 출력
+	public List<Cashbook> printDailyCashbook(String memberId, int targetYear, int targetMont, int targetDate){
+		List<Cashbook> list = new ArrayList<Cashbook>();
+		
+		Connection conn = null;
+		
+		try {
+			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			conn.setAutoCommit(false);
+			
+			CashbookDao cashbookDao = new CashbookDao();
+			list = cashbookDao.selectCashbookListByDate(conn, memberId, targetYear, targetMont, targetDate);
+			
+			conn.commit();
+		} catch(Exception e) {
+			System.out.println("printDailyCashbook 가계부출력 예외발생");
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	//태그별 가계부 출력, 페이징
+	public Map<String, Object> printCashbookListByTagPage(String memberId, String hashtag, int startIdx, int rowPerPage){
+		List<Cashbook> list = null;
+		int cnt = -1;
+		Map<String, Object> map = null;
+		
+		Connection conn = null;
+		
+		try {
+			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			conn.setAutoCommit(false);
+			
+			CashbookDao cashbookDao = new CashbookDao();
+			list = cashbookDao.selectCashbookListByTag(conn, memberId, hashtag, startIdx, rowPerPage);
+			cnt = cashbookDao.selectCashbookCountByTag(conn, memberId, hashtag);
+			map = new HashMap<String, Object>();
+			map.put("list", list);
+			map.put("cnt", cnt);
+			
+			conn.commit();
+		} catch(Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return map;
+	}
+
+	//가계부번호별 출력
+	public Cashbook printCashbookByNo(int cashbookNo) {
+		Cashbook cashbook = null;
+		
+		Connection conn = null;
+				
+		try {
+			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			Class.forName("org.mariadb.jdbc.Driver");
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			conn.setAutoCommit(false);
+			
+			CashbookDao cashbookDao = new CashbookDao();
+			cashbook = cashbookDao.selectCashbookByNo(conn, cashbookNo);
+			
+			conn.commit();
+		} catch(Exception e) {
+			System.out.println("printCashbookByNo 예외발생");
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return cashbook;
+	}
+	
 	//가계부 입력
 	public String addCashbook(Cashbook cashbook) {
 		String msg = null;

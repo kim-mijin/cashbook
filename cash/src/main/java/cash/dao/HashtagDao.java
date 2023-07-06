@@ -13,18 +13,13 @@ import cash.vo.Hashtag;
 
 public class HashtagDao {
 	//월별 해쉬태그 순위별 조회
-	public List<Map<String, Object>> selectWordCountByMonth(String memberId, int targetYear, int targetMonth){
+	public List<Map<String, Object>> selectWordCountByMonth(Connection conn, String memberId, int targetYear, int targetMonth){
 		List<Map<String, Object>> list = new ArrayList<>();
 		
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			String driver = "org.mariadb.jdbc.Driver";
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
-			String dbUser = "root";
-			String dbPw = "java1234";
 			String sql = "SELECT word, COUNT(*) cnt "
 					+ "FROM hashtag h "
 					+ "INNER JOIN cashbook c "
@@ -32,8 +27,6 @@ public class HashtagDao {
 					+ "WHERE c.member_id = ? AND YEAR(c.cashbook_date) = ? AND MONTH(c.cashbook_date) = ? "
 					+ "GROUP BY word "
 					+ "ORDER BY COUNT(*) DESC ";
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, targetYear);
@@ -52,7 +45,6 @@ public class HashtagDao {
 			try {
 				rs.close();
 				stmt.close();
-				conn.close();
 			} catch(Exception e2) {
 				e2.printStackTrace();
 			}

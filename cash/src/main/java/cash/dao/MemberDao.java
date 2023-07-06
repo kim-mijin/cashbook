@@ -16,7 +16,6 @@ public class MemberDao {
 		String sql = "SELECT member_id memberId FROM member WHERE member_id = ? AND member_pw = PASSWORD(?)";
 		
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, paramMember.getMemberId());
 			stmt.setString(2, paramMember.getMemberPw());
@@ -45,7 +44,6 @@ public class MemberDao {
 		int idCount = 0;
 		try {
 			String sql = "SELECT COUNT(*) FROM member WHERE member_id = ?";
-			Class.forName("org.mariadb.jdbc.Driver");
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			rs = stmt.executeQuery();
@@ -72,7 +70,6 @@ public class MemberDao {
 		String sql = "INSERT into member SET member_id = ?, member_pw = PASSWORD(?), createdate=NOW(), updatedate=NOW()";
 		
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, paramMember.getMemberId());
 			stmt.setString(2, paramMember.getMemberPw());

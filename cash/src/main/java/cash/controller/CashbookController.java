@@ -3,6 +3,7 @@ package cash.controller;
 import java.io.IOException;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import cash.dao.CashbookDao;
 import cash.dao.HashtagDao;
+import cash.service.CashbookService;
 import cash.vo.Cashbook;
 import cash.vo.Member;
 
@@ -73,11 +75,9 @@ public class CashbookController extends HttpServlet {
 		int totalCell = beginBlank + lastDate + endBlank;
 		System.out.println(totalCell + " <--totalCell");
 		
-		//모델을 호출(DAO 타겟 수입, 지출 데이터)
-		CashbookDao cashbookDao = new CashbookDao();
-		HashtagDao hashtagDao = new HashtagDao();
-		List<Cashbook> list = cashbookDao.selectCashbookListByMonth(memberId, targetYear, targetMonth);
-		List<Map<String,Object>> htList = hashtagDao.selectWordCountByMonth(memberId, targetYear, targetMonth+1);
+		//모델을 호출(DAO 타겟 수입, 지출 데이터)->매개변수 HashMap에 담기
+		CashbookService cashbookService = new CashbookService();
+		Map<String, Object> map = cashbookService.printCashbookCalendar(memberId, targetYear, targetMonth); //월별 가계부 목록과 해쉬태그 목록을 Map에 담아 반환
 		
 		//뷰에 값을 넘기기(request 속성)
 		//넘겨야 할 매개값이 많고 자주 사용될 것이라면 dto타입을 만들거나 맵으로 넘길 수 있다.
@@ -89,8 +89,8 @@ public class CashbookController extends HttpServlet {
 		request.setAttribute("beginBlank", beginBlank);
 		request.setAttribute("endBlank", endBlank);
 		
-		request.setAttribute("list", list);
-		request.setAttribute("htList", htList);
+		request.setAttribute("list", map.get("cashbookList"));
+		request.setAttribute("htList", map.get("tagList"));
 		
 		//달력을 출력하는 뷰로 포워드
 		request.getRequestDispatcher("/WEB-INF/view/cashbook.jsp").forward(request, response);

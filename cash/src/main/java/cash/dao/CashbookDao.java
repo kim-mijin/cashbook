@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,26 +54,19 @@ public class CashbookDao {
 	}
 	
 	//해쉬태그별 가계부 목록 조회
-	public List<Cashbook> selectCashbookListByTag(String memberId, String hashtag, int startIdx, int rowPerPage){
+	public List<Cashbook> selectCashbookListByTag(Connection conn, String memberId, String hashtag, int startIdx, int rowPerPage) throws SQLException{
 		List<Cashbook> list = new ArrayList<>();
 		
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			String driver = "org.mariadb.jdbc.Driver";
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
-			String dbUser = "root";
-			String dbPw = "java1234";
 			String sql = "SELECT c.cashbook_no cashbookNo, member_id memberId, category, cashbook_date cashbookDate, price, memo, c.createdate, c.updatedate "
 					+ "FROM cashbook c "
 					+ "INNER JOIN hashtag h "
 					+ "ON c.cashbook_no = h.cashbook_no "
 					+ "WHERE c.member_id = ? AND h.word = ? "
 					+ "ORDER BY cashbookDate DESC LIMIT ?, ? ";
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setString(2, hashtag);
@@ -92,13 +86,10 @@ public class CashbookDao {
 				c.setUpdatedate(rs.getString("updatedate"));
 				list.add(c);
 			}
-		} catch(Exception e1) {
-			e1.printStackTrace();
 		} finally {
 			try {
 				rs.close();
 				stmt.close();
-				conn.close();
 			} catch(Exception e2) {
 				e2.printStackTrace();
 			}
@@ -108,24 +99,17 @@ public class CashbookDao {
 	}
 	
 	//해쉬태그별 가계부 목록 페이징을 위한 전체 데이터 수 구하기
-	public int selectCashbookCountByTag(String memberId, String hashtag) {
+	public int selectCashbookCountByTag(Connection conn, String memberId, String hashtag) throws SQLException {
 		int cnt = 0;
 		
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			String driver = "org.mariadb.jdbc.Driver";
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
-			String dbUser = "root";
-			String dbPw = "java1234";
 			String sql = "SELECT COUNT(*) "
 					+ "FROM cashbook c INNER JOIN hashtag h "
 					+ "ON c.cashbook_no = h.cashbook_no "
 					+ "WHERE c.member_id = ? AND h.word = ? ";
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setString(2, hashtag);
@@ -134,13 +118,10 @@ public class CashbookDao {
 			if(rs.next()) {
 				cnt = rs.getInt(1);
 			}
-		} catch(Exception e1) {
-			e1.printStackTrace();
 		} finally {
 			try {
 				rs.close();
 				stmt.close();
-				conn.close();
 			} catch(Exception e2) {
 				e2.printStackTrace();
 			}
@@ -150,28 +131,21 @@ public class CashbookDao {
 	}
 	
 	//월별 가계부 목록 조회
-	public List<Cashbook> selectCashbookListByMonth(String memberId, int targetYear, int targetMonth){
+	public List<Cashbook> selectCashbookListByMonth(Connection conn, String memberId, int targetYear, int targetMonth) throws Exception{
 		List<Cashbook> list = new ArrayList<Cashbook>();
 		
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			String driver = "org.mariadb.jdbc.Driver";
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
-			String dbUser = "root";
-			String dbPw = "java1234";
 			String sql = "SELECT cashbook_no cashbookNo, category, price, cashbook_date cashbookDate "
 					+ "FROM cashbook "
 					+ "WHERE member_id = ? AND YEAR(cashbook_date) = ? AND MONTH(cashbook_date) = ? "
 					+ "ORDER BY cashbook_date ASC";
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, targetYear);
-			stmt.setInt(3, targetMonth + 1);
+			stmt.setInt(3, targetMonth);
 			rs = stmt.executeQuery();
 			System.out.println(stmt + " <--stmt");
 			while(rs.next()) {
@@ -182,13 +156,10 @@ public class CashbookDao {
 				c.setCashbookDate(rs.getString("cashbookDate"));
 				list.add(c);
 			}
-		} catch(Exception e1) {
-			e1.printStackTrace();
 		} finally {
 			try {
 				rs.close();
 				stmt.close();
-				conn.close();
 			} catch(Exception e2) {
 				e2.printStackTrace();
 			}
@@ -197,24 +168,17 @@ public class CashbookDao {
 	}
 	
 	//일별 가계부 목록 조회
-	public List<Cashbook> selectCashbookListByDate(String memberId, int targetYear, int targetMonth, int targetDate){
+	public List<Cashbook> selectCashbookListByDate(Connection conn, String memberId, int targetYear, int targetMonth, int targetDate) throws Exception{
 		List<Cashbook> list = new ArrayList<Cashbook>();
 		
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			String driver = "org.mariadb.jdbc.Driver";
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
-			String dbUser = "root";
-			String dbPw = "java1234";
 			String sql = "SELECT cashbook_no cashbookNo, member_id memberId, category, cashbook_date cashbookDate, price, memo, createdate, updatedate "
 					+ "FROM cashbook "
 					+ "WHERE member_id = ? AND YEAR(cashbook_date) = ? AND MONTH(cashbook_date) = ? AND DAY(cashbook_date) = ? "
 					+ "ORDER BY createdate ASC";
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, targetYear);
@@ -234,13 +198,10 @@ public class CashbookDao {
 				c.setUpdatedate(rs.getString("updatedate"));
 				list.add(c);
 			}
-		} catch(Exception e1) {
-			e1.printStackTrace();
 		} finally {
 			try {
 				rs.close();
 				stmt.close();
-				conn.close();
 			} catch(Exception e2) {
 				e2.printStackTrace();
 			}
@@ -249,23 +210,16 @@ public class CashbookDao {
 	}
 	
 	//가계부 번호로 상세 내용 조회
-	public Cashbook selectCashbookByNo(int cashbookNo) {
+	public Cashbook selectCashbookByNo(Connection conn, int cashbookNo) throws SQLException {
 		Cashbook cashbook = null;
 		
-		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			String driver = "org.mariadb.jdbc.Driver";
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
-			String dbUser = "root";
-			String dbPw = "java1234";
 			String sql = "SELECT cashbook_no cashbookNo, member_id memberId, category, cashbook_date cashbookDate, price, memo, createdate, updatedate "
 					+ "FROM cashbook "
 					+ "WHERE cashbook_no = ?";
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, cashbookNo);
 			System.out.println(stmt + " <--CashbookDao selectCashbookByNo stmt");
@@ -281,13 +235,10 @@ public class CashbookDao {
 				cashbook.setCreatedate(rs.getString("createdate"));
 				cashbook.setUpdatedate(rs.getString("updatedate"));
 			}
-		} catch(Exception e1) {
-			e1.printStackTrace();
 		} finally {
 			try {
 				rs.close();
 				stmt.close();
-				conn.close();
 			} catch(Exception e2) {
 				e2.printStackTrace();
 			}

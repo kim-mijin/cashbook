@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import cash.dao.CashbookDao;
 import cash.dao.HashtagDao;
+import cash.service.CashbookService;
 import cash.vo.Cashbook;
 import cash.vo.Member;
 
@@ -45,11 +46,12 @@ public class CashbookTagController extends HttpServlet {
 		int startIdx = (currentPage-1)*rowPerPage;
 		
 		//DAO 메서드 실행하여 list를 변수에 저장
-		CashbookDao cashbookDao = new CashbookDao();
-		List<Cashbook> list = cashbookDao.selectCashbookListByTag(memberId, hashtag, startIdx, rowPerPage);
+		CashbookService cashbookService = new CashbookService();
+		Map<String, Object> m = cashbookService.printCashbookListByTagPage(memberId, hashtag, startIdx, rowPerPage);
+		List<Cashbook> list = (List)m.get("list");
 		
 		//리스트 페이지네이션
-		int totalCnt = cashbookDao.selectCashbookCountByTag(memberId, hashtag);
+		int totalCnt = (int)m.get("cnt");
 		int lastPage = totalCnt / rowPerPage;
 		if(totalCnt % rowPerPage != 0) {
 			lastPage += 1;
