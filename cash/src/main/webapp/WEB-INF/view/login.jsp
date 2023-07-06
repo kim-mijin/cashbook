@@ -20,11 +20,15 @@
 		<form method="post" action="${pageContext.request.contextPath}/login"> <!-- el(expression language) 사용하여 자바코드 대체하기 -->
 			<div>
 				<label for="memberId">아이디</label>
-				<input type="text" id="memberId" name="memberId" required>
+				<input type="text" id="memberId" name="memberId" value="${loginId}" required><!-- 쿠키에 저장된 아이디가 있으면 보여주기 -->
 			</div>
 			<div>
 				<label for="memberPw">비밀번호</label>
 				<input type="password" id="memberPw" name="memberPw" required>
+			</div>
+			<div>
+				<label for="idCookie">아이디 저장</label>
+				<input type="checkbox" id="idCookie" name="idCookie" value="y">
 			</div>
 			<div>
 				<button type="submit">로그인</button>

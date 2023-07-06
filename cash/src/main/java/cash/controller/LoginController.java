@@ -3,6 +3,7 @@ package cash.controller;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,18 @@ public class LoginController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/cashbook");
 			return;
 		}
+		
+		//Cookie에 저장된 아이디가 있으면 request속성에 담아 forward한다 (view에서 보여주기 위하여)
+		Cookie[] cookies = request.getCookies();
+		//cookies에 값이 있고 loginId키로 저장된 값이 있는 경우에는 request에 담는다
+		if(cookies != null) {
+			for(Cookie c : cookies) {
+				if(c.getName().equals("loginId")) {
+					request.setAttribute("loginId", c.getValue());
+				}
+			}
+		}
+		
 		request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response); //login으로 get방식 요청이 들어오면 login.jsp로 forward
 	}
 	
@@ -43,6 +56,13 @@ public class LoginController extends HttpServlet {
 		} 
 		
 		//로그인 성공 : session 사용
+		//만약 idCookie값이 null이 아니라면(아이디 저장 체크한 경우) Cookie에 해당 id를 저장한다 -> 로그인폼에서 아이디를 보여줌
+		if(request.getParameter("idCookie") != null) {
+			Cookie cookie = new Cookie("loginId", memberId);
+			cookie.setMaxAge(60*60*1); //cookie 유효기간은 1시간
+			response.addCookie(cookie); //response에 쿠키 추가
+		}
+		
 		HttpSession session = request.getSession(); //request의 세션을 받아온다
 		System.out.println("로그인 성공");
 		session.setAttribute("loginMember", loginMember); //세션에 login정보 저장
