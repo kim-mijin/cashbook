@@ -17,7 +17,7 @@ import cash.vo.Hashtag;
 
 public class CashbookService {
 	//가계부 달력 및 해당월 해시태그목록 출력
-	public Map<String, Object> printCashbookCalendar(String memberId, int targetYear, int targetMonth){
+	public Map<String, Object> getCashbookCalendar(String memberId, int targetYear, int targetMonth){
 		List<Cashbook> cashbookList = new ArrayList<Cashbook>();
 		List<Map<String, Object>> tagList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map = null;
@@ -64,7 +64,7 @@ public class CashbookService {
 	}
 	
 	//일별 가계부 출력
-	public List<Cashbook> printDailyCashbook(String memberId, int targetYear, int targetMont, int targetDate){
+	public List<Cashbook> getDailyCashbook(String memberId, int targetYear, int targetMont, int targetDate){
 		List<Cashbook> list = new ArrayList<Cashbook>();
 		
 		Connection conn = null;
@@ -100,7 +100,7 @@ public class CashbookService {
 	}
 	
 	//태그별 가계부 출력, 페이징
-	public Map<String, Object> printCashbookListByTagPage(String memberId, String hashtag, int startIdx, int rowPerPage){
+	public Map<String, Object> getCashbookListByTagPage(String memberId, String hashtag, int startIdx, int rowPerPage){
 		List<Cashbook> list = null;
 		int cnt = -1;
 		Map<String, Object> map = null;
@@ -142,7 +142,7 @@ public class CashbookService {
 	}
 
 	//가계부번호별 출력
-	public Cashbook printCashbookByNo(int cashbookNo) {
+	public Cashbook getCashbookByNo(int cashbookNo) {
 		Cashbook cashbook = null;
 		
 		Connection conn = null;

@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import cash.dao.MemberDao;
 import cash.service.MemberService;
 
-@WebServlet("/idCk")
+@WebServlet("/off/idCk")
 public class IdValidationController extends HttpServlet {
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

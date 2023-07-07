@@ -18,18 +18,13 @@ import cash.vo.Cashbook;
 import cash.vo.Hashtag;
 import cash.vo.Member;
 
-@WebServlet("/modifyCashbook")
+@WebServlet("/on/modifyCashbook")
 public class ModifyCashbookController extends HttpServlet {
 	//뷰 페이지
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 유효성 검사
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") == null) {
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}
-		Object o = session.getAttribute("loginMember"); 
+		//session 유효성 검사 -> 필터로 처리
+		Object o = request.getSession().getAttribute("loginMember"); 
 		String memberId = ""; 
 		if(o instanceof Member) { memberId = ((Member)o).getMemberId(); }
 		 
@@ -41,7 +36,7 @@ public class ModifyCashbookController extends HttpServlet {
 		
 		//가계부를 가져오는 메서드 실행
 		CashbookService cashbookService = new CashbookService();
-		Cashbook cashbook = cashbookService.printCashbookByNo(cashbookNo);
+		Cashbook cashbook = cashbookService.getCashbookByNo(cashbookNo);
 		
 		//request에 담기
 		request.setAttribute("memberId", memberId);
@@ -98,7 +93,7 @@ public class ModifyCashbookController extends HttpServlet {
 		request.setAttribute("msg", msg);
 		
 		//리다이렉션
-		response.sendRedirect(request.getContextPath()+"/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
+		response.sendRedirect(request.getContextPath()+"/on/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
 		
 	}
 }

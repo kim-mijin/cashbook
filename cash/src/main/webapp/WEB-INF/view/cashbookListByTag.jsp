@@ -46,8 +46,8 @@
 	<div class="container">
 		<!-- 네이게이션바 시작 -->
 		<div>
-			<a href="${pageContext.request.contextPath}/logout">로그아웃</a>
-			<a href="${pageContext.request.contextPath}/cashbook">가계부</a>
+			<a href="${pageContext.request.contextPath}/on/logout">로그아웃</a>
+			<a href="${pageContext.request.contextPath}/on/cashbook">가계부</a>
 		</div>
 		<!-- 네이게이션바 끝 -->
 	
@@ -57,7 +57,7 @@
 			<!-- 보기 선택 시작 -->
 			<div class="row">
 				<div class="col-2">
-					<form class="form-group" method="get" action="${pageContext.request.contextPath}/cashbookListByTag">
+					<form class="form-group" method="get" action="${pageContext.request.contextPath}/on/cashbookListByTag">
 						<input type="hidden" name="hashtag" value="${hashtag}">
 						<input type="hidden" name="currentPage" value="1">
 						<select class="form-control" id="rowPerPage" name="rowPerPage">
@@ -97,17 +97,17 @@
 			  <ul class="pagination justify-content-center">
 			  	<!-- 첫번째 블럭에서는 비활성화 -->
 			    <li id="previous" class="page-item"> 
-			      <a class="page-link" href="${pageContext.request.contextPath}/cashbookListByTag?currentPage=${startPageInBlock-1}&rowPerPage=${rowPerPage}&hashtag=${hashtag}" tabindex="-1">이전</a>
+			      <a class="page-link" href="${pageContext.request.contextPath}/on/cashbookListByTag?currentPage=${startPageInBlock-1}&rowPerPage=${rowPerPage}&hashtag=${hashtag}" tabindex="-1">이전</a>
 			    </li>
 			    <!-- pagePerBlock만큼 반복 -->
 			    <c:forEach var="i" begin="${startPageInBlock}" end="${endPageInBlock}" step="1">
 			    	<li id="currPage" class="page-item">
-			    		<a class="page-link" href="${pageContext.request.contextPath}/cashbookListByTag?currentPage=${currentPage}&rowPerPage=${rowPerPage}&hashtag=${hashtag}">${i}</a>
+			    		<a class="page-link" href="${pageContext.request.contextPath}/on/cashbookListByTag?currentPage=${currentPage}&rowPerPage=${rowPerPage}&hashtag=${hashtag}">${i}</a>
 			    	</li>
 			    </c:forEach>
 			    <!-- 마지막 블럭에서는 비활성화 -->
 			    <li id="next" class="page-item"> 
-			      <a class="page-link" href="${pageContext.request.contextPath}/cashbookListByTag?currentPage=${endPageInBlock+1}&rowPerPage=${rowPerPage}&hashtag=${hashtag}">다음</a>
+			      <a class="page-link" href="${pageContext.request.contextPath}/on/cashbookListByTag?currentPage=${endPageInBlock+1}&rowPerPage=${rowPerPage}&hashtag=${hashtag}">다음</a>
 			    </li>
 			  </ul>
 			</nav>

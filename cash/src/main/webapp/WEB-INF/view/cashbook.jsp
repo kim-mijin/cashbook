@@ -17,13 +17,23 @@
 <!-- 부트스트랩 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		let price = $("#price").text();
+		console.log(typeof(price));
+		let won = price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		console.log(won);
+		$("#price").text(won);
+	})
+</script>
 </head>
 <body>
 	<div class="container">
 		<!-- 네비게이션 -->
 		<div>
-			<a href="${pageContext.request.contextPath}/logout">로그아웃</a>
-			<a href="${pageContext.request.contextPath}/cashbook">가계부</a>
+			<a href="${pageContext.request.contextPath}/on/logout">로그아웃</a>
+			<a href="${pageContext.request.contextPath}/on/cashbook">가계부</a>
 		</div>
 	
 		<!-- 변수값 or 반환값 : EL(Expression Language)사용 달러{...} -->
@@ -38,8 +48,8 @@
 			${targetYear}년 ${targetMonth + 1}월
 		</h1>
 		<div>
-			<a href="${pageContext.request.contextPath}/cashbook?targetYear=${targetYear}&targetMonth=${targetMonth - 1}">이전달</a>
-			<a href="${pageContext.request.contextPath}/cashbook?targetYear=${targetYear}&targetMonth=${targetMonth + 1}">다음달</a>
+			<a href="${pageContext.request.contextPath}/on/cashbook?targetYear=${targetYear}&targetMonth=${targetMonth - 1}">이전달</a>
+			<a href="${pageContext.request.contextPath}/on/cashbook?targetYear=${targetYear}&targetMonth=${targetMonth + 1}">다음달</a>
 		</div>
 		
 		<!-- --------------------------------------------------- 가계부 달력 시작 ------------------------------------------------------------- -->
@@ -47,7 +57,7 @@
 			<h2>이달의 해시태그</h2>
 			<div>
 				<c:forEach var="m" items="${htList}">
-					<a href="${pageContext.request.contextPath}/cashbookListByTag?hashtag=${m.word}">${m.word}(${m.cnt})</a>
+					<a href="${pageContext.request.contextPath}/on/cashbookListByTag?hashtag=${m.word}">${m.word}(${m.cnt})</a>
 				</c:forEach>
 			</div>
 		</div>
@@ -77,15 +87,15 @@
 						
 						<c:if test="${!( d < 1 || d > lastDate)}">
 							<td>
-								<div><a href="${pageContext.request.contextPath}/cashbookListByDate?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${d}">${d}</a></div>
+								<div><a href="${pageContext.request.contextPath}/on/cashbookListByDate?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${d}">${d}</a></div>
 								<c:forEach var="c" items="${list}">
 									<c:if test="${d == fn:substring(c.cashbookDate, 8, 10)}">
 										<div>
 											<c:if test="${c.category == '수입'}">
-												<span>+${c.price}</span>
+												<span>${c.price}</span>
 											</c:if>
 											<c:if test="${c.category == '지출'}">
-												<span style="color:red">-${c.price}</span>
+												<span>-</span><span id="price" style="color:red">${c.price}</span>
 											</c:if>
 										</div>
 									</c:if>
@@ -96,39 +106,5 @@
 			</table>
 		</div>
 	</div>
-	<%-- <table>
-		<tr>
-			<th>일요일</th>
-			<th>월요일</th>
-			<th>화요일</th>
-			<th>수요일</th>
-			<th>목요일</th>
-			<th>금요일</th>
-			<th>토요일</th>
-		</tr>
-		<tr>
-		<%
-			//totalCell만큼 <td></td>반복 -> i가 7로 나누어 떨어지면 행바꿈
-			//i가 beginBlank-1보다 크고 beginBlank + lastDate보다 작을때만 날짜 출력
-			for(int i=0; i< totalCell; i++){
-				if(i != 0 && i % 7 == 0){
-		%>
-					</tr>
-					<tr>
-		<%
-				}
-				if(i > beginBlank - 1 && i < beginBlank + lastDate ){
-		%>
-				<td><%=i + 1 - beginBlank%></td>
-		<%
-				} else {
-		%>
-				<td>&nbsp;</td>
-		<%
-				}
-			}
-		%>
-		</tr>
-	</table> --%>
 </body>
 </html>

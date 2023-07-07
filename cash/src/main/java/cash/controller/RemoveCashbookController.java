@@ -16,16 +16,10 @@ import cash.vo.Member;
 /**
  * Servlet implementation class removeCashbookController
  */
-@WebServlet("/removeCashbook")
+@WebServlet("/on/removeCashbook")
 public class RemoveCashbookController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 유효성 검사
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") == null) {
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}
-		
+		//session 유효성 검사 -> Filter로 처리
 		//request 매개값 (cashbookNo)
 		int cashbookNo = Integer.parseInt(request.getParameter("cashbookNo"));
 		int targetYear = Integer.parseInt(request.getParameter("targetYear"));
@@ -37,7 +31,7 @@ public class RemoveCashbookController extends HttpServlet {
 		String msg = cashbookService.removeCashbook(cashbookNo);
 		
 		//cashbookListByDate 컨트롤러로 리다이렉션
-		response.sendRedirect(request.getContextPath()+"/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
+		response.sendRedirect(request.getContextPath()+"/on/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
 		
 	}
 }

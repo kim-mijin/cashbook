@@ -26,14 +26,34 @@
 			})
 		})
 		
-		//입력값 유효성 검사
-		${}
+		//회원가입 입력값 유효성 검사
+		//아이디는 10자까지 입력가능
+		$("#memberId").keyup(function(){
+			const MAX_LENGTH = 10;
+			let len = $("#memberId").val().length;
+			if(len > MAX_LENGTH){
+				len = $("#memberId").val().substring(0, MAX_LENGTH);
+				$("#memberId").val(len);
+				$("#memberId").focus();
+			}			
+		})
+		
+		//비밀번호는 15자까지 입력가능
+		$("#memberPw").keyup(function(){
+			const MAX_LENGTH = 15;
+			let len = $("#memberPw").val().length;
+			if(len > MAX_LENGTH){
+				len = $("#memberPw").val().substring(0, MAX_LENGTH);
+				$("#memberPw").val(len);
+				$("#memberPw").focus();
+			}			
+		})
 	})
 </script>
 </head>
 <body>
 	<h1>회원가입</h1>
-	<form method="post" action="${pageContext.request.contextPath}/signUp">
+	<form method="post" action="${pageContext.request.contextPath}/off/signUp">
 		<div>
 			<label for="memberId">아이디</label>
 			<input type="text" id="memberId" name="memberId" required>

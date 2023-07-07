@@ -18,18 +18,13 @@ import cash.vo.Cashbook;
 import cash.vo.Hashtag;
 import cash.vo.Member;
 
-@WebServlet("/addCashbook")
+@WebServlet("/on/addCashbook")
 public class AddCashbookController extends HttpServlet {
 	//입력폼
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 유효성 검사 : 로그인이 되어있지 않으면 로그인컨트롤러로 리다이렉션
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") == null) {
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}
-		Object o = session.getAttribute("loginMember");
+		//session 유효성 검사 : 로그인이 되어있지 않으면 로그인컨트롤러로 리다이렉션 -> Filter로 처리
+		Object o = request.getSession().getAttribute("loginMember");
 		String memberId = "";
 		if(o instanceof Member) {
 			memberId = ((Member)o).getMemberId();
@@ -92,7 +87,7 @@ public class AddCashbookController extends HttpServlet {
 		request.setAttribute("msg", msg);
 		
 		//cashbookDaily로 리다이렉트
-		response.sendRedirect(request.getContextPath()+"/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
+		response.sendRedirect(request.getContextPath()+"/on/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);
 	}
 
 }

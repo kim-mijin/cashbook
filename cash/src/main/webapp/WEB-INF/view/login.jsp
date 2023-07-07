@@ -12,12 +12,12 @@
 	<div class="container">
 		<!-- 네비게이션바 시작 -->
 		<div>
-			<a href="${pageContext.request.contextPath}/signUp">회원가입</a>
+			<a href="${pageContext.request.contextPath}/off/signUp">회원가입</a>
 		</div>
 		<!-- 네비게이션바 시작 -->
 		<!-- 로그인폼 시작 -->
 		<h1>로그인</h1>
-		<form method="post" action="${pageContext.request.contextPath}/login"> <!-- el(expression language) 사용하여 자바코드 대체하기 -->
+		<form method="post" action="${pageContext.request.contextPath}/off/login"> <!-- el(expression language) 사용하여 자바코드 대체하기 -->
 			<div>
 				<label for="memberId">아이디</label>
 				<input type="text" id="memberId" name="memberId" value="${loginId}" required><!-- 쿠키에 저장된 아이디가 있으면 보여주기 -->

@@ -13,16 +13,11 @@ import cash.dao.MemberDao;
 import cash.service.MemberService;
 import cash.vo.Member;
 
-@WebServlet("/login") //LoginController서블릿을 login이름으로 맵핑 -> login에 요청하면 LoginController가 응답
+@WebServlet("/off/login") //LoginController서블릿을 login이름으로 맵핑 -> login에 요청하면 LoginController가 응답
 public class LoginController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 인증 검사 코드 : 로그인이 된 사람은 cashbook으로 리다이렉션
-		HttpSession session = request.getSession();
-		if(session.getAttribute("memberId") != null) { 
-			response.sendRedirect(request.getContextPath()+"/cashbook");
-			return;
-		}
+		//session 인증 검사 코드 : 로그인이 된 사람은 cashbook으로 리다이렉션 -> Filter로 처리
 		
 		//Cookie에 저장된 아이디가 있으면 request속성에 담아 forward한다 (view에서 보여주기 위하여)
 		Cookie[] cookies = request.getCookies();
@@ -66,7 +61,7 @@ public class LoginController extends HttpServlet {
 		HttpSession session = request.getSession(); //request의 세션을 받아온다
 		System.out.println("로그인 성공");
 		session.setAttribute("loginMember", loginMember); //세션에 login정보 저장
-		response.sendRedirect(request.getContextPath()+"/cashbook"); //로그인 성공하면 cashbook서블릿으로 리다이렉션
+		response.sendRedirect(request.getContextPath()+"/on/cashbook"); //로그인 성공하면 cashbook서블릿으로 리다이렉션
 	}
 
 }

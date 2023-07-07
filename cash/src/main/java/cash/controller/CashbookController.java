@@ -20,17 +20,12 @@ import cash.service.CashbookService;
 import cash.vo.Cashbook;
 import cash.vo.Member;
 
-@WebServlet("/cashbook")
+@WebServlet("/on/cashbook")
 public class CashbookController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 인증 검사 (null인 경우 login으로 리다이렉션 후 종료)
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") == null) {
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}
-		Object o = session.getAttribute("loginMember");
+		//session 인증 검사 (null인 경우 login으로 리다이렉션 후 종료) -> 필터로 처리
+		Object o = request.getSession().getAttribute("loginMember");
 		String memberId = "";
 		if(o instanceof Member) {
 			memberId = ((Member)o).getMemberId();
@@ -77,7 +72,7 @@ public class CashbookController extends HttpServlet {
 		
 		//모델을 호출(DAO 타겟 수입, 지출 데이터)->매개변수 HashMap에 담기
 		CashbookService cashbookService = new CashbookService();
-		Map<String, Object> map = cashbookService.printCashbookCalendar(memberId, targetYear, targetMonth); //월별 가계부 목록과 해쉬태그 목록을 Map에 담아 반환
+		Map<String, Object> map = cashbookService.getCashbookCalendar(memberId, targetYear, targetMonth); //월별 가계부 목록과 해쉬태그 목록을 Map에 담아 반환
 		
 		//뷰에 값을 넘기기(request 속성)
 		//넘겨야 할 매개값이 많고 자주 사용될 것이라면 dto타입을 만들거나 맵으로 넘길 수 있다.

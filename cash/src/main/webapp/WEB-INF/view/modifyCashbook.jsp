@@ -26,7 +26,7 @@
 	<!------------------------------------------------------------------ 수정폼 시작 ------------------------------------------------------------------>
 	<div>
 		<div class="d-flex">
-			<form method="post" action="${pageContext.request.contextPath}/modifyCashbook">
+			<form method="post" action="${pageContext.request.contextPath}/on/modifyCashbook">
 				<input type="hidden" name="cashbookNo" value="${cashbook.cashbookNo}">
 				<input type="hidden" name="targetYear" value="${targetYear}">
 				<input type="hidden" name="targetMonth" value="${targetMonth}">

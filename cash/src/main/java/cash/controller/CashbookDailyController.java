@@ -17,18 +17,13 @@ import cash.service.CashbookService;
 import cash.vo.Cashbook;
 import cash.vo.Member;
 
-@WebServlet("/cashbookListByDate")
+@WebServlet("/on/cashbookListByDate")
 public class CashbookDailyController extends HttpServlet {
 	//뷰 페이지
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 유효성 검사 (로그인 null이면 login컨트롤러로 리다이렉션 후 종료)
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") == null) {
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}
-		Object o = session.getAttribute("loginMember");
+		//session 유효성 검사 (로그인 null이면 login컨트롤러로 리다이렉션 후 종료) -> Filter로 처리
+		Object o = request.getSession().getAttribute("loginMember");
 		String memberId = "";
 		if(o instanceof Member) {
 			memberId = ((Member)o).getMemberId();
@@ -52,7 +47,7 @@ public class CashbookDailyController extends HttpServlet {
 		
 		//해당 날짜의 모델값 불러오기 
 		CashbookService cashbookService = new CashbookService();
-		List<Cashbook> list = cashbookService.printDailyCashbook(memberId, targetYear, targetMonth, targetDate);
+		List<Cashbook> list = cashbookService.getDailyCashbook(memberId, targetYear, targetMonth, targetDate);
 		
 		//request속성으로 모델 값 보내기
 		request.setAttribute("targetYear", targetYear);

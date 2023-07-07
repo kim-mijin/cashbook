@@ -19,7 +19,7 @@
 	<!------------------------------------------------------------------ 입력폼 시작 ------------------------------------------------------------------>
 	<div>
 		<div class="d-flex">
-			<form method="post" action="${pageContext.request.contextPath}/addCashbook">
+			<form method="post" action="${pageContext.request.contextPath}/on/addCashbook">
 				<input type="hidden" name="targetYear" value="${targetYear}">
 				<input type="hidden" name="targetMonth" value="${targetMonth}">
 				<input type="hidden" name="targetDate" value="${targetDate}">

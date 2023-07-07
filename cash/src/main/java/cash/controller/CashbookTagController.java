@@ -17,17 +17,12 @@ import cash.service.CashbookService;
 import cash.vo.Cashbook;
 import cash.vo.Member;
 
-@WebServlet("/cashbookListByTag")
+@WebServlet("/on/cashbookListByTag")
 public class CashbookTagController extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 유효성 검사 : 로그인 안되어있으면 login으로 리다이렉션
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") == null) {
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}
-		Object o = session.getAttribute("loginMember");
+		//session 유효성 검사 : 로그인 안되어있으면 login으로 리다이렉션 -> 필터로 처리
+		Object o = request.getSession().getAttribute("loginMember");
 		String memberId = "";
 		if(o instanceof Member) {
 			memberId = ((Member)o).getMemberId();
@@ -47,7 +42,7 @@ public class CashbookTagController extends HttpServlet {
 		
 		//DAO 메서드 실행하여 list를 변수에 저장
 		CashbookService cashbookService = new CashbookService();
-		Map<String, Object> m = cashbookService.printCashbookListByTagPage(memberId, hashtag, startIdx, rowPerPage);
+		Map<String, Object> m = cashbookService.getCashbookListByTagPage(memberId, hashtag, startIdx, rowPerPage);
 		List<Cashbook> list = (List)m.get("list");
 		
 		//리스트 페이지네이션

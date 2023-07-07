@@ -11,13 +11,15 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class LogoutController
  */
-@WebServlet("/logout")
+@WebServlet("/on/logout")
 public class LogoutController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//로그인 session 유효성 검사 -> Filter로 처리
+		
 		HttpSession session = request.getSession();
 		session.invalidate();
 		
-		response.sendRedirect(request.getContextPath()+"/login");
+		response.sendRedirect(request.getContextPath()+"/on/login");
 	}
 
 

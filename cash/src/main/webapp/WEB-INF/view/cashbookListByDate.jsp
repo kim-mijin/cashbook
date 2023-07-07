@@ -37,14 +37,14 @@
 						<td>${c.price}</td>
 						<td>${fn:substring(c.createdate, 0, 10)}</td>
 						<td>${fn:substring(c.updatedate, 0, 10)}</td>
-						<td><a id="modifyBtn" class="btn btn-sm btn-primary" href="${pageContext.request.contextPath}/modifyCashbook?cashbookNo=${c.cashbookNo}&targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">수정</a></td>
-						<td><a id="removeBtn" class="btn btn-sm btn-primary" href="${pageContext.request.contextPath}/removeCashbook?cashbookNo=${c.cashbookNo}&targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">삭제</a></td>
+						<td><a id="modifyBtn" class="btn btn-sm btn-primary" href="${pageContext.request.contextPath}/on/modifyCashbook?cashbookNo=${c.cashbookNo}&targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">수정</a></td>
+						<td><a id="removeBtn" class="btn btn-sm btn-primary" href="${pageContext.request.contextPath}/on/removeCashbook?cashbookNo=${c.cashbookNo}&targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">삭제</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 		<div><!-- 가계부 입력버튼 -->
-			<a class="btn btn-primary" href="${pageContext.request.contextPath}/addCashbook?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">추가하기</a>
+			<a class="btn btn-primary" href="${pageContext.request.contextPath}/on/addCashbook?targetYear=${targetYear}&targetMonth=${targetMonth}&targetDate=${targetDate}">추가하기</a>
 		</div>
 	</div>
 </body>

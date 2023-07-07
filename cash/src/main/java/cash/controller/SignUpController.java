@@ -12,17 +12,14 @@ import cash.dao.MemberDao;
 import cash.service.MemberService;
 import cash.vo.Member;
 
-@WebServlet("/signUp")
+@WebServlet("/off/signUp")
 public class SignUpController extends HttpServlet {
 	
+	//회원가입 폼
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//session 유효성 검사(null일 때) : 로그인 되어 있으면 calendar로 가기
-		HttpSession session = request.getSession();
-		if(session.getAttribute("loginMember") != null) {
-			response.sendRedirect(request.getContextPath()+"/calendar");
-			return;
-		}
+		//session 유효성 검사(null일 때) : 로그인 되어 있으면 calendar로 가기 -> Filter로 처리
+		
 		//로그인 안되어 있으면 뷰 페이지로 포워드
 		request.getRequestDispatcher("/WEB-INF/view/signUp.jsp").forward(request, response);
 	}
@@ -41,10 +38,10 @@ public class SignUpController extends HttpServlet {
 		int row = memberService.signup(member);
 		if(row == 0) { //회원가입 실패 시
 			//addMember.jsp로 이동하는 controller를 리다이렉트
-			response.sendRedirect(request.getContextPath()+"/signUp");
+			response.sendRedirect(request.getContextPath()+"/off/signUp");
 		} else if (row == 1){ //회원 가입 성공 시
 			//login.jsp로 이동하는 controller를 리다이렉트
-			response.sendRedirect(request.getContextPath()+"/login");			
+			response.sendRedirect(request.getContextPath()+"/off/login");			
 		} else {
 			System.out.println("sign up fails");
 		}
