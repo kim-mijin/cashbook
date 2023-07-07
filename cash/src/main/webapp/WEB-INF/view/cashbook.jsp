@@ -35,6 +35,11 @@
 			<a href="${pageContext.request.contextPath}/on/logout">로그아웃</a>
 			<a href="${pageContext.request.contextPath}/on/cashbook">가계부</a>
 		</div>
+		
+		<!-- 방문자수 -->
+		<div>
+			<c:import url="/counter"></c:import>
+		</div>
 	
 		<!-- 변수값 or 반환값 : EL(Expression Language)사용 달러{...} -->
 		<!-- 

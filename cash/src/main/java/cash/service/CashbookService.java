@@ -16,6 +16,13 @@ import cash.vo.Cashbook;
 import cash.vo.Hashtag;
 
 public class CashbookService {
+	/*
+		CashbookService의 메소드를 실행하면 CashbookDao, HashtagDao에 있는 메소드를 사용하기 위하여 CashbookDao, HashtagDao의 새로운 인스턴스를 생성하는데
+		CashbookService의 필드로 선언하여 메서드 실행마다 새로운 인스턴스를 만들지 않고 해당 만들어진 CashbookDao, HashtagDao필드를 사용
+	*/
+	private CashbookDao cashbookDao;
+	private HashtagDao hashtagDao;
+	
 	//가계부 달력 및 해당월 해시태그목록 출력
 	public Map<String, Object> getCashbookCalendar(String memberId, int targetYear, int targetMonth){
 		List<Cashbook> cashbookList = new ArrayList<Cashbook>();
@@ -27,16 +34,15 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //conn 자동 커밋 해제
 			
 			//월별 가계부 출력
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			cashbookList = cashbookDao.selectCashbookListByMonth(conn, memberId, targetYear, targetMonth+1);
 			
 			//월별 해쉬태그 목록 출력
-			HashtagDao hashtagDao = new HashtagDao();
+			this.hashtagDao = new HashtagDao();
 			tagList = hashtagDao.selectWordCountByMonth(conn, memberId, targetYear, targetMonth+1);
 			
 			//Map으로 묶기
@@ -73,11 +79,10 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false);
 			
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			list = cashbookDao.selectCashbookListByDate(conn, memberId, targetYear, targetMont, targetDate);
 			
 			conn.commit();
@@ -111,11 +116,10 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false);
 			
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			list = cashbookDao.selectCashbookListByTag(conn, memberId, hashtag, startIdx, rowPerPage);
 			cnt = cashbookDao.selectCashbookCountByTag(conn, memberId, hashtag);
 			map = new HashMap<String, Object>();
@@ -151,11 +155,10 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false);
 			
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			cashbook = cashbookDao.selectCashbookByNo(conn, cashbookNo);
 			
 			conn.commit();
@@ -187,19 +190,18 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			
 			//자동커밋 끄기
 			conn.setAutoCommit(false);
 			
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			int cashbookNo = cashbookDao.insertCashbook(conn, cashbook);
 			
 			//입력 성공 시 -> 해쉬태그가 존재한다면 -> 해쉬태그 추출 -> 해쉬태그 입력(반복)
 			//해쉬태그 추출 알고리즘
 			//# #구디 #구디 #자바
-			HashtagDao hashtagDao = new HashtagDao();
+			this.hashtagDao = new HashtagDao();
 			String rplMemo = cashbook.getMemo().replace("#", " #"); //#을 공백+#으로 바꿔줌 (#자바##파이썬 -> #자바 # #파이썬)
 			
 			Set<String> set = new HashSet<String>(); //중복된 해쉬태그를 방지하기 위해 set자료구조 사용
@@ -251,17 +253,16 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false);
 			
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			cashbookDao.updateCashbook(conn, cashbook);
 
 			//수정 성공 시 -> 기존 해쉬태그 삭제 -> 해쉬태그가 존재한다면 -> 해쉬태그 추출 -> 해쉬태그 입력(반복)
 			//해쉬태그 추출 알고리즘
 			//# #구디 #구디 #자바
-			HashtagDao hashtagDao = new HashtagDao();
+			this.hashtagDao = new HashtagDao();
 			hashtagDao.deleteHashtag(conn, cashbook.getCashbookNo()); //기존 해쉬태그삭제
 			
 			String rplMemo = cashbook.getMemo().replace("#", " #"); //#을 공백+#으로 바꿔줌 (#자바##파이썬 -> #자바 # #파이썬)
@@ -312,17 +313,16 @@ public class CashbookService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false);
 			
 			//삭제 메서드 실행 순서는 자식테이블인 hashtag먼저한다
 			//해쉬태그 삭제
-			HashtagDao hashtagDao = new HashtagDao();
+			this.hashtagDao = new HashtagDao();
 			hashtagDao.deleteHashtag(conn, cashbookNo);
 
 			//삭제 메서드 실행
-			CashbookDao cashbookDao = new CashbookDao();
+			this.cashbookDao = new CashbookDao();
 			cashbookDao.deleteCashbook(conn, cashbookNo);
 			
 			conn.commit();

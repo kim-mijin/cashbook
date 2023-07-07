@@ -8,6 +8,8 @@ import cash.dao.MemberDao;
 import cash.vo.Member;
 
 public class MemberService {
+	private MemberDao memberDao;
+	
 	//로그인
 	public Member login(Member paramMember) {
 		Member member = null;
@@ -17,11 +19,10 @@ public class MemberService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //자동 커밋 해제
 			
-			MemberDao memberDao = new MemberDao();
+			this.memberDao = new MemberDao();
 			member = memberDao.selectMemberById(conn, paramMember);
 			
 			conn.commit();
@@ -52,11 +53,10 @@ public class MemberService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //자동 커밋 해제
 			
-			MemberDao memberDao = new MemberDao();
+			this.memberDao = new MemberDao();
 			idCount = memberDao.memberIdCheck(conn, memberId);
 			
 			conn.commit();
@@ -87,11 +87,10 @@ public class MemberService {
 			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
-			Class.forName("org.mariadb.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
 			conn.setAutoCommit(false); //자동 커밋 해제
 			
-			MemberDao memberDao = new MemberDao();
+			this.memberDao = new MemberDao();
 			row = memberDao.insertMember(conn, paramMember);
 			
 			conn.commit();
