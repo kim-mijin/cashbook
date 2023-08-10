@@ -1,6 +1,7 @@
 package cash.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import cash.dao.MemberDao;
 import cash.service.MemberService;
 import cash.vo.Member;
 
@@ -30,7 +30,7 @@ public class LoginController extends HttpServlet {
 			}
 		}
 		
-		request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response); //login으로 get방식 요청이 들어오면 login.jsp로 forward
+		request.getRequestDispatcher("/WEB-INF/view/off/login.jsp").forward(request, response); //login으로 get방식 요청이 들어오면 login.jsp로 forward
 	}
 	
 	@Override

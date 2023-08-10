@@ -30,7 +30,7 @@ public class HashtagDao {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, targetYear);
-			stmt.setInt(3, targetMonth);
+			stmt.setInt(3, targetMonth + 1);
 			System.out.println(stmt + " <--HashtagDao selectWordCountByMonth stmt");
 			rs = stmt.executeQuery();
 			while(rs.next()) {

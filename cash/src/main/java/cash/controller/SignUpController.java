@@ -21,7 +21,7 @@ public class SignUpController extends HttpServlet {
 		//session 유효성 검사(null일 때) : 로그인 되어 있으면 calendar로 가기 -> Filter로 처리
 		
 		//로그인 안되어 있으면 뷰 페이지로 포워드
-		request.getRequestDispatcher("/WEB-INF/view/signUp.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/off/signUp.jsp").forward(request, response);
 	}
 	
 	//회원가입 액션

@@ -39,11 +39,11 @@ public class CashbookService {
 			
 			//월별 가계부 출력
 			this.cashbookDao = new CashbookDao();
-			cashbookList = cashbookDao.selectCashbookListByMonth(conn, memberId, targetYear, targetMonth+1);
+			cashbookList = cashbookDao.selectCashbookListByMonth(conn, memberId, targetYear, targetMonth);
 			
 			//월별 해쉬태그 목록 출력
 			this.hashtagDao = new HashtagDao();
-			tagList = hashtagDao.selectWordCountByMonth(conn, memberId, targetYear, targetMonth+1);
+			tagList = hashtagDao.selectWordCountByMonth(conn, memberId, targetYear, targetMonth);
 			
 			//Map으로 묶기
 			map = new HashMap<String, Object>();
@@ -67,6 +67,41 @@ public class CashbookService {
 		}
 		
 		return map;
+	}
+	
+	//월별 가계부 출력
+	public List<Cashbook> getMonthlyCashbook(String memberId, int targetYear, int targetMonth){
+		List<Cashbook> list = new ArrayList<Cashbook>();
+		
+		Connection conn = null;
+		
+		try {
+			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			conn.setAutoCommit(false);
+			
+			this.cashbookDao = new CashbookDao();
+			list = cashbookDao.selectCashbookListByMonth(conn, memberId, targetYear, targetMonth);
+			
+			conn.commit();
+		} catch(Exception e) {
+			System.out.println("printMonthlyCashbook 가계부출력 예외발생");
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 	
 	//일별 가계부 출력

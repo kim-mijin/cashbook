@@ -34,6 +34,21 @@ public class ModifyCashbookController extends HttpServlet {
 		int targetDate = Integer.parseInt(request.getParameter("targetDate"));
 		int cashbookNo = Integer.parseInt(request.getParameter("cashbookNo"));
 		
+		String monthStr = "";
+		String dateStr = "";
+		if(targetMonth<9) {
+			monthStr = "0" + (targetMonth + 1);
+		} else {
+			monthStr = "" + targetMonth;
+		}
+		if(targetDate < 10) {
+			dateStr = "0" + targetDate;
+		} else {
+			dateStr = "" + targetDate;
+		}
+		String targetDayStr = targetYear + "-" + monthStr + "-" + dateStr;
+		System.out.println(targetDayStr);
+		
 		//가계부를 가져오는 메서드 실행
 		CashbookService cashbookService = new CashbookService();
 		Cashbook cashbook = cashbookService.getCashbookByNo(cashbookNo);
@@ -44,9 +59,10 @@ public class ModifyCashbookController extends HttpServlet {
 		request.setAttribute("targetYear", targetYear);
 		request.setAttribute("targetMonth", targetMonth);
 		request.setAttribute("targetDate", targetDate);
+		request.setAttribute("targetDayStr", targetDayStr);
 		
 		//뷰 페이지로 포워드
-		request.getRequestDispatcher("/WEB-INF/view/modifyCashbook.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/on/modifyCashbook.jsp").forward(request, response);
 	}
 	
 	//가계부 수정 액션
@@ -84,13 +100,11 @@ public class ModifyCashbookController extends HttpServlet {
 		
 		//수정 메서드 실행
 		CashbookService cashbookSerivce = new CashbookService();
-		String msg = cashbookSerivce.modifyCashbook(cashbook);
 		
 		//request속성에 값 저장
 		request.setAttribute("targetYear", targetYear);
 		request.setAttribute("targetMonth", targetMonth);
 		request.setAttribute("targetDate", targetDate);
-		request.setAttribute("msg", msg);
 		
 		//리다이렉션
 		response.sendRedirect(request.getContextPath()+"/on/cashbookListByDate?targetYear="+targetYear+"&targetMonth="+targetMonth+"&targetDate="+targetDate);

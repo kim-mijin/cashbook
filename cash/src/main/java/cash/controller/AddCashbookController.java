@@ -53,7 +53,7 @@ public class AddCashbookController extends HttpServlet {
 		request.setAttribute("cashbookDate", cashbookDate);
 		
 		//입력폼으로 forward
-		request.getRequestDispatcher("/WEB-INF/view/addCashbook.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/on/addCashbook.jsp").forward(request, response);
 	}
 	
 	//입력액션

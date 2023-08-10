@@ -138,20 +138,21 @@ public class CashbookDao {
 		ResultSet rs = null;
 		
 		try {
-			String sql = "SELECT cashbook_no cashbookNo, category, price, cashbook_date cashbookDate "
+			String sql = "SELECT cashbook_no cashbookNo, category, memo, price, cashbook_date cashbookDate "
 					+ "FROM cashbook "
 					+ "WHERE member_id = ? AND YEAR(cashbook_date) = ? AND MONTH(cashbook_date) = ? "
-					+ "ORDER BY cashbook_date ASC";
+					+ "ORDER BY category ASC, cashbook_date ASC";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, memberId);
 			stmt.setInt(2, targetYear);
-			stmt.setInt(3, targetMonth);
+			stmt.setInt(3, targetMonth + 1);
 			rs = stmt.executeQuery();
 			System.out.println(stmt + " <--stmt");
 			while(rs.next()) {
 				Cashbook c = new Cashbook();
 				c.setCashbookNo(rs.getInt("cashbookNo"));
 				c.setCategory(rs.getString("category"));
+				c.setMemo(rs.getString("memo"));
 				c.setPrice(rs.getInt("price"));
 				c.setCashbookDate(rs.getString("cashbookDate"));
 				list.add(c);
@@ -166,6 +167,7 @@ public class CashbookDao {
 		}
 		return list;
 	}
+	
 	
 	//일별 가계부 목록 조회
 	public List<Cashbook> selectCashbookListByDate(Connection conn, String memberId, int targetYear, int targetMonth, int targetDate) throws Exception{

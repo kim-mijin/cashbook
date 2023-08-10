@@ -1,0 +1,29 @@
+@charset "UTF-8";
+.navbar {
+	font-family: 'NanumSquareRound';
+}
+
+.container {
+	font-family: 'NanumSquareRound';
+}
+
+.footer {
+	font-family: 'NanumSquareRound';
+}
+
+.login {
+	width : 30%;
+}
+
+a {
+	text-decoration: none;
+}
+
+td[id="calendar"] {
+	width : 200px;
+	height : 200px;
+}
+
+.text-right {
+	text-align : right;
+}

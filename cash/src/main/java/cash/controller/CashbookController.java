@@ -88,7 +88,7 @@ public class CashbookController extends HttpServlet {
 		request.setAttribute("htList", map.get("tagList"));
 		
 		//달력을 출력하는 뷰로 포워드
-		request.getRequestDispatcher("/WEB-INF/view/cashbook.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/on/cashbook.jsp").forward(request, response);
 	}
 
 }

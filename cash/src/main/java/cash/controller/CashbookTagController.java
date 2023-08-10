@@ -74,7 +74,7 @@ public class CashbookTagController extends HttpServlet {
 		request.setAttribute("endPageInBlock", endPageInBlock);
 		
 		//해시태그 뷰 페이지(hashtagList.jsp)로 포워드
-		request.getRequestDispatcher("/WEB-INF/view/cashbookListByTag.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/on/cashbookListByTag.jsp").forward(request, response);
 	}
 
 

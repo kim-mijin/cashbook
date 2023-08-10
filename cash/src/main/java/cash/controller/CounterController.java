@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import cash.service.CounterService;
 
-@WebServlet("/counter")
+@WebServlet("/on/counter")
 public class CounterController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//오늘 방문자 수
@@ -25,7 +25,7 @@ public class CounterController extends HttpServlet {
 		request.setAttribute("totalCounter", totalCounter);
 		
 		//현재방문자수와 누적방문자수를 보여주는 뷰로 포워드
-		request.getRequestDispatcher("WEB-INF/view/counter.jsp").forward(request, response);
+		request.getRequestDispatcher("/resources/inc/counter.jsp").forward(request, response);
 	}
 
 }
