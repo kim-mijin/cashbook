@@ -46,7 +46,7 @@ public class LoginController extends HttpServlet {
 		
 		if(loginMember == null) {
 			System.out.println("로그인 실패");
-			response.sendRedirect(request.getContextPath()+"/on/login"); //로그인 실패하면 login서블릿으로 리다이렉션
+			response.sendRedirect(request.getContextPath()+"/off/login"); //로그인 실패하면 login서블릿으로 리다이렉션
 			return;
 		} 
 		
