@@ -57,7 +57,7 @@ public class ExcelController extends HttpServlet {
 		
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
-		out.print(listStr);;
+		out.print(listStr);
 		
 	}
 }

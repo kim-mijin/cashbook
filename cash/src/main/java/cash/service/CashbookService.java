@@ -31,7 +31,7 @@ public class CashbookService {
 		Connection conn = null;
 		
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -76,7 +76,7 @@ public class CashbookService {
 		Connection conn = null;
 		
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -104,6 +104,41 @@ public class CashbookService {
 		return list;
 	}
 	
+	//월 카테고리별 합계 출력
+	public List<Map<String,Object>> getSumByCategory(String memberId, int targetYear, int targetMonth){
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		Connection conn = null;
+		
+		try {
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
+			String dbUser = "root";
+			String dbPw = "java1234";
+			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+			conn.setAutoCommit(false);
+			
+			this.cashbookDao = new CashbookDao();
+			list = cashbookDao.selectSumByCategory(conn, memberId, targetYear, targetMonth);
+			
+			conn.commit();
+		} catch(Exception e) {
+			System.out.println("printMonthlyCashbook 가계부출력 예외발생");
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
 	//일별 가계부 출력
 	public List<Cashbook> getDailyCashbook(String memberId, int targetYear, int targetMont, int targetDate){
 		List<Cashbook> list = new ArrayList<Cashbook>();
@@ -111,7 +146,7 @@ public class CashbookService {
 		Connection conn = null;
 		
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -148,7 +183,7 @@ public class CashbookService {
 		Connection conn = null;
 		
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -187,7 +222,7 @@ public class CashbookService {
 		Connection conn = null;
 				
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -222,7 +257,7 @@ public class CashbookService {
 		Connection conn = null;
 
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -285,7 +320,7 @@ public class CashbookService {
 		Connection conn = null;
 		
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
@@ -345,7 +380,7 @@ public class CashbookService {
 		Connection conn = null;
 		
 		try {
-			String dbUrl = "jdbc:mariadb://127.0.0.1:3306/cash";
+			String dbUrl = "jdbc:mariadb://43.202.82.110:3306/cash";
 			String dbUser = "root";
 			String dbPw = "java1234";
 			conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);

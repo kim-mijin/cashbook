@@ -18,6 +18,9 @@
 				</c:if>
 					<c:if test="${loginMember != null}">
 					<li class="nav-item">
+						<a class="nav-link" href="${pageContext.request.contextPath}/on/myPage">마이페이지</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="${pageContext.request.contextPath}/on/cashbook">가계부</a>	
 					</li>
 					<li class="nav-item">

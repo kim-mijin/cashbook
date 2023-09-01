@@ -10,7 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import cash.vo.Cashbook;
 
 public class CashbookDao {
@@ -168,6 +171,44 @@ public class CashbookDao {
 		return list;
 	}
 	
+	//월별 수입 지출 합계
+	public List<Map<String, Object>> selectSumByCategory(Connection conn, String memberId, int targetYear, int targetMonth) throws Exception{
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			String sql = "SELECT category, SUM(price) sumPrice "
+					+ "FROM "
+					+ "(SELECT member_id, cashbook_date, category, price "
+					+ "FROM cashbook "
+					+ "WHERE member_id = ? "
+					+ "AND YEAR(cashbook_date) = ? "
+					+ "AND MONTH(cashbook_date) = ?) AS t "
+					+ "GROUP BY category";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, memberId);
+			stmt.setInt(2, targetYear);
+			stmt.setInt(3, targetMonth + 1);
+			System.out.println(stmt + " <--CashbookDao selectSumByCategory stmt");
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Map<String, Object> m = new HashMap<String, Object>();
+				m.put("category", rs.getString("category"));
+				m.put("sumPrice", rs.getInt("sumPrice"));
+				list.add(m);
+			}
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return list;
+	}
 	
 	//일별 가계부 목록 조회
 	public List<Cashbook> selectCashbookListByDate(Connection conn, String memberId, int targetYear, int targetMonth, int targetDate) throws Exception{
